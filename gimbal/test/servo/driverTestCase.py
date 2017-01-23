@@ -141,6 +141,11 @@ class Test(unittest.TestCase):
         throttles = driver.getThrottles()
         
         self.assertSequenceEqual(throttles, [0.0, 100.0], "Wrong values")
+        
+        
+    def testNeutralThrottle(self):
+        
+        self.assertEquals(Driver.NEUTRAL_THROTTLE, 50.0, "Incorrect neutral throttle")
 
 
 
