@@ -121,15 +121,21 @@ class Motor(object):
         
         self._throttle = float(throttle)
 
-        if self._throttle >= Motor.MIN_THROTTLE and self._throttle <= Motor.MAX_THROTTLE:            
+        if self._throttle < Motor.MIN_THROTTLE:
+            
+            self.setMinThrottle()
+        
+        elif self._throttle > Motor.MAX_THROTTLE:
+            
+            self.setMaxThrottle()
+        
+        else:
         
             self._duty = self._calculateDuty(self._throttle)
-            #logging.debug("motor {0}: duty={1}; throttle={2}".format(self._motorId, self._duty, self._throttle))
-        
             self._sysfsWriter.write(str(self._duty))
+            
+        #TODO: Set motor at minimum or maximum on throttle out of bounds (create test)
 
-        #else:
-        #    logging.debug("motor {0}: duty={1}; throttle={2} (virtual)".format(self._motorId, self._duty, self._throttle))
         
     
     def getThrottle(self):

@@ -20,7 +20,7 @@ class Driver(object):
     Controls a motor set
     '''
     
-    NEUTRAL_THROTTLE = Motor.MAX_THROTTLE / 2.0
+    NEUTRAL_THROTTLE = Motor.MIN_THROTTLE + (Motor.MAX_THROTTLE - Motor.MIN_THROTTLE) / 2.0
     X_AXIS_MOTOR = 0
     Y_AXIS_MOTOR = 1
     

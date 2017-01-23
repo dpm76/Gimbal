@@ -186,7 +186,31 @@ class MotorTest(unittest.TestCase):
         
         duty = motor._calculateDuty(100.0)
         self.assertEquals(duty, 2000000, "Wrong duty")
+        
+        
+    def testOverRangeThrottle(self):
+        
+        filesystem = SysfsWriterDummy()
+        motor = Motor(0, 50.0).setSysfsWriter(filesystem)
+        motor.start()
+        
+        motor.setThrottle(120.0)
+        throttle = motor.getThrottle()
+        
+        self.assertEquals(throttle, 100.0, "Throttle wasn't properly set")
+
     
+    def testUnderRangeThrottle(self):
+
+        filesystem = SysfsWriterDummy()
+        motor = Motor(0, 50.0).setSysfsWriter(filesystem)
+        motor.start()
+        
+        motor.setThrottle(-10.0)
+        throttle = motor.getThrottle()
+        
+        self.assertEquals(throttle, 0.0, "Throttle wasn't properly set")
+
     
 
 
