@@ -57,6 +57,8 @@ class Motor(object):
         self._neutralThrottle = neutralThrottle
         self._throttle = neutralThrottle
         self._duty = self._calculateDuty(self._throttle)
+
+        self._sysfsWriter = None
         
         
     def setSysfsWriter(self, sysfsWriter):
