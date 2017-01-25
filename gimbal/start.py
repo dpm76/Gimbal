@@ -3,6 +3,7 @@ Created on 24 ene. 2017
 
 @author: david
 '''
+import logging
 from time import sleep
 
 from config import Configuration
@@ -22,6 +23,7 @@ def main():
     stabilizator = Stabilizator(Imu6050Dmp(), Driver(2, config[Configuration.KEY_MOTOR_CLASS]), config[Configuration.PID_PERIOD], 2)
     stabilizator.setPidConstants(config[Configuration.PID_KP], config[Configuration.PID_KI], config[Configuration.PID_KD])
     stabilizator.start()
+    logging.info("Started! Press Ctrl+C to stop.")
     
     try:
         while True:
