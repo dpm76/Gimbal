@@ -4,6 +4,8 @@ Created on 24 ene. 2017
 
 @author: david
 '''
+from time import sleep
+
 from stabilization.pid import Pid
 
 
@@ -41,8 +43,9 @@ class Stabilizator(object):
         Starts stabilizator
         """
         
-        self._sensor.start()
         self._driver.start()
+        sleep(1)
+        self._sensor.start()        
         self._pid.start()
     
     
