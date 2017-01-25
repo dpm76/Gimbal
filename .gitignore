@@ -1,4 +1,5 @@
 *.pyc
 /.metadata
-gimbal.config.json
+*.json
+
 
