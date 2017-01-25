@@ -4,6 +4,7 @@ Created on 20 de ene. de 2016
 @author: david
 '''
 import json
+from os import path
 
 
 DEFAULT_FILE_PATH = "./config.json"
@@ -58,15 +59,15 @@ class Configuration(object):
         self._config = Configuration.DEFAULT_CONFIG.copy()
             
     
-    def read(self, path=DEFAULT_FILE_PATH):
+    def read(self, filepath=DEFAULT_FILE_PATH):
         """
         Reads stored configuration from file
-        @param path: Configuration filepath
+        @param filepath: Configuration filepath
         """
         
-        if path.exists(path):
+        if path.exists(filepath):
     
-            with open(path, "r") as configFile:
+            with open(filepath, "r") as configFile:
                 serializedConfig = " ".join(configFile.readlines())
                 configFile.close()
                 
@@ -79,17 +80,17 @@ class Configuration(object):
                     
                     self._config[key] = storedConfig[key]
         else:
-            raise Exception("Configuration file {0} not found.".format(path))
+            raise Exception("Configuration file {0} not found.".format(filepath))
                     
                     
-    def save(self, path=DEFAULT_FILE_PATH):
+    def save(self, filepath=DEFAULT_FILE_PATH):
         """
         Writes current configuration into file
-        @param path: Configuration filepath
+        @param filepath: Configuration filepath
         """
         
         serializedConfig = json.dumps(self._config)        
-        with open(path, "w+") as configFile:
+        with open(filepath, "w+") as configFile:
             configFile.write(serializedConfig + "\n")
             configFile.close()
             
