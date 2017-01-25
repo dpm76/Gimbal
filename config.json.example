@@ -1,0 +1,1 @@
+{"PID_KP": [2.0, 2.0], "PID_KD": [0.02, 0.02], "pid-period": 0.04, "PID_KI": [20.0, 20.0], "imu-class": "imu6050", "motor-class": "local"}
