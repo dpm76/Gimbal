@@ -34,8 +34,8 @@ class Stabilizator(object):
         
         self._pid\
             .setProportionalConstants(kp)\
-            .setIntegralConstants(kp)\
-            .setDerivativeConstants(kp)        
+            .setIntegralConstants(ki)\
+            .setDerivativeConstants(kd)        
         
         
     def start(self):
@@ -76,7 +76,6 @@ class Stabilizator(object):
         """
         
         #TODO Lock pid integral when output is out of motor range
-        
         self._driver.rotateX(-output[0])
         self._driver.rotateY(output[1])
         
