@@ -5,6 +5,7 @@ Created on 20 de ene. de 2016
 '''
 import json
 from os import path
+import logging
 
 
 DEFAULT_FILE_PATH = "./config.json"
@@ -80,7 +81,7 @@ class Configuration(object):
                     
                     self._config[key] = storedConfig[key]
         else:
-            raise Exception("Configuration file {0} not found.".format(filepath))
+            logging.info("Configuration file {0} not found. Using default config.".format(filepath))            
                     
                     
     def save(self, filepath=DEFAULT_FILE_PATH):
