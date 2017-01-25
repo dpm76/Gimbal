@@ -6,9 +6,11 @@ Created on 20 de ene. de 2016
 import json
 
 
+DEFAULT_FILE_PATH = "./config.json"
+
 class Configuration(object):
     
-    FILE_PATH = "./config.json"
+    
     
     KEY_MOTOR_CLASS = "motor-class"
     VALUE_MOTOR_CLASS_LOCAL = "local"
@@ -56,7 +58,7 @@ class Configuration(object):
         self._config = Configuration.DEFAULT_CONFIG.copy()
             
     
-    def read(self, path=Configuration.FILE_PATH):
+    def read(self, path=DEFAULT_FILE_PATH):
         """
         Reads stored configuration from file
         @param path: Configuration filepath
@@ -80,7 +82,7 @@ class Configuration(object):
             raise Exception("Configuration file {0} not found.".format(path))
                     
                     
-    def save(self, path=Configuration.FILE_PATH):
+    def save(self, path=DEFAULT_FILE_PATH):
         """
         Writes current configuration into file
         @param path: Configuration filepath
