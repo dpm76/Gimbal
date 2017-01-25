@@ -4,12 +4,11 @@ Created on 20 de ene. de 2016
 @author: david
 '''
 import json
-from os import path
 
 
 class Configuration(object):
     
-    FILE_PATH = "./gimbal.config.json"
+    FILE_PATH = "./config.json"
     
     KEY_MOTOR_CLASS = "motor-class"
     VALUE_MOTOR_CLASS_LOCAL = "local"
@@ -19,6 +18,8 @@ class Configuration(object):
     VALUE_IMU_CLASS_6050 = "imu6050"
     VALUE_IMU_CLASS_DUMMY = "dummy"
     
+    PID_PERIOD = "pid-period"
+    
     PID_KP = "PID_KP"
     PID_KI = "PID_KI"
     PID_KD = "PID_KD"
@@ -27,15 +28,19 @@ class Configuration(object):
                       KEY_MOTOR_CLASS: VALUE_MOTOR_CLASS_DUMMY,
                       KEY_IMU_CLASS: VALUE_IMU_CLASS_DUMMY,
                       
-                      PID_KP: [0.0, 0.0, 0.0],  
-                      PID_KI: [0.0, 0.0, 0.0],  
-                      PID_KD: [0.0, 0.0, 0.0]
+                      PID_PERIOD: 0.1,
+                      PID_KP: [0.0, 0.0],  
+                      PID_KI: [0.0, 0.0],  
+                      PID_KD: [0.0, 0.0]
                       }
     
     _instance = None
     
     @staticmethod
     def getInstance():
+        """
+        @return: Unique object instance
+        """
         
         if Configuration._instance == None:
             Configuration._instance = Configuration()
@@ -44,13 +49,22 @@ class Configuration(object):
     
 
     def __init__(self):
+        """
+        Constructor
+        """        
         
-        #Read stored config from file
         self._config = Configuration.DEFAULT_CONFIG.copy()
-        
-        if path.exists(Configuration.FILE_PATH):
+            
     
-            with open(Configuration.FILE_PATH, "r") as configFile:
+    def read(self, path=Configuration.FILE_PATH):
+        """
+        Reads stored configuration from file
+        @param path: Configuration filepath
+        """
+        
+        if path.exists(path):
+    
+            with open(path, "r") as configFile:
                 serializedConfig = " ".join(configFile.readlines())
                 configFile.close()
                 
@@ -62,13 +76,22 @@ class Configuration(object):
                 if key in storedConfig:
                     
                     self._config[key] = storedConfig[key]
+        else:
+            raise Exception("Configuration file {0} not found.".format(path))
                     
-        #Write current config into file
+                    
+    def save(self, path=Configuration.FILE_PATH):
+        """
+        Writes current configuration into file
+        @param path: Configuration filepath
+        """
+        
         serializedConfig = json.dumps(self._config)        
-        with open(Configuration.FILE_PATH, "w+") as configFile:
+        with open(path, "w+") as configFile:
             configFile.write(serializedConfig + "\n")
             configFile.close()
             
+        
             
     def getConfig(self):
         
