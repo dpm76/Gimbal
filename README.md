@@ -34,25 +34,25 @@ Log the BeagleBone in using your preferred terminal emulator. Once the code is f
 
 Next step is add the stabilizer path into the python's path. If you current working directory is the gimbal stablizer project's root path, you can easily enter:
 
-'''
+```
 export PYTHONPATH=./gimbal
-'''
+```
 
 or replace the relative path with the full path if you want to execute it regardeless the current working directory.
 
 The last step here, is to initialize the BeagleBone's PWM subsystem. Just type in the following command as root from the project's root path:
 
-'''
+```
 ./init-motor.sh
-'''
+```
 
 ## Starting up
 
 Once the last steps are successfully done, just launch the stabilizer as root privileges with the following command:
 
-'''
+```
 python ./gimbal/start.py
-'''
+```
 
 suppousing the current working directory is the project's root directory.
 
