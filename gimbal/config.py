@@ -12,8 +12,6 @@ DEFAULT_FILE_PATH = "./config.json"
 
 class Configuration(object):
     
-    
-    
     KEY_MOTOR_CLASS = "motor-class"
     VALUE_MOTOR_CLASS_LOCAL = "local"
     VALUE_MOTOR_CLASS_DUMMY = "dummy"

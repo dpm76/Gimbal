@@ -5,10 +5,10 @@ Created on 23/01/2017
 
 @author: david
 '''
-import logging
-
-from random import uniform, seed
 from copy import deepcopy
+from time import time
+import logging
+from random import uniform, seed
 
 
 class SensorDummy(object):
@@ -17,7 +17,7 @@ class SensorDummy(object):
     '''
     
     ERROR_ANGLE_SPEED_DISTRIBUTION = [-1.0, 1.0] #[-0.1, 0.15]
-    ERROR_ANGLE_DISTRIBUTION = [-0.0, 0.0] #[-0.08, 0.1]
+    ERROR_ANGLE_DISTRIBUTION = [-0.08, 0.1]
     ERROR_ACCEL_DISTRIBUTION = [-0.1, 0.1] #[-0.1, 0.15]
     
     def __init__(self, addNoise=False):
@@ -26,6 +26,7 @@ class SensorDummy(object):
         if self._addNoise:        
             seed()
         self._currentAngles = [0.0] * 3
+        self._timestamp = time() 
     
     
     def _noisify(self, data, distribution):
@@ -45,11 +46,16 @@ class SensorDummy(object):
         Positive angles are CCW for axis Z
         '''
         
-        state = self._drone.getState()        
+        angleSpeed = self._noisify([0.0]*3, SensorDummy.ERROR_ANGLE_SPEED_DISTRIBUTION)
+        timeStampNow = time()
+        timeDelta = timeStampNow - self._timestamp
+        self._timestamp = timeStampNow
+        angleDelta = [timeDelta * angle for angle in angleSpeed]
+        self._currentAngles = [x+y for x,y in zip(angleDelta, self._currentAngles)]
         angles = \
-            self._noisify(state._angles, SensorDummy.ERROR_ANGLE_DISTRIBUTION) \
+            self._noisify(self._currentAngles, SensorDummy.ERROR_ANGLE_DISTRIBUTION) \
             if self._addNoise \
-            else deepcopy(state._angles) 
+            else deepcopy(self._currentAngles) 
         
         return angles
 
@@ -60,7 +66,7 @@ class SensorDummy(object):
 
     
     def resetGyroReadTime(self):        
-        pass
+        self._timestamp = time()
 
     
     def refreshState(self):
@@ -70,7 +76,8 @@ class SensorDummy(object):
     def start(self):
         
         text = "Using dummy IMU." 
-
+        
+        print(text)
         logging.info(text)
         
     

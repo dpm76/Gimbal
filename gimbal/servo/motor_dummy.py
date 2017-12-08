@@ -8,7 +8,7 @@ import time
 
 class MotorDummy(object):
     
-    MAX_THROTTLE = 80.0 #percentage
+    MAX_THROTTLE = 100.0 #percentage
     
     def __init__(self, motorId, neutralThrottle=0.0):
         """
@@ -30,6 +30,7 @@ class MotorDummy(object):
     def setThrottle(self, throttle):
         
         self._throttle = float(throttle)
+        print("motor[{0}]={1}".format(self._motorId,throttle))
         time.sleep(0.001)
 
         

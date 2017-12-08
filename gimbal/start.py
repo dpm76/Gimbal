@@ -7,7 +7,6 @@ import logging
 from time import sleep
 
 from config import Configuration
-from sensor.imu6050dmp import Imu6050Dmp
 from servo.driver import Driver
 from stabilization.stabilizator import Stabilizator
 
@@ -19,8 +18,8 @@ def main():
     configManager.save()
     
     config = configManager.getConfig()
-        
-    stabilizator = Stabilizator(Imu6050Dmp(), Driver(2, config[Configuration.KEY_MOTOR_CLASS]), config[Configuration.PID_PERIOD], 2)
+            
+    stabilizator = Stabilizator(config[Configuration.KEY_IMU_CLASS], Driver(2, config[Configuration.KEY_MOTOR_CLASS]), config[Configuration.PID_PERIOD], 2)
     stabilizator.setPidConstants(config[Configuration.PID_KP], config[Configuration.PID_KI], config[Configuration.PID_KD])
     stabilizator.start()
     print "started!"

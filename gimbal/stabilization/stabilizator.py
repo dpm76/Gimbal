@@ -6,6 +6,9 @@ Created on 24 ene. 2017
 '''
 from time import sleep
 
+from config import Configuration
+from sensor.imu6050dmp import Imu6050Dmp
+from sensor.sensor_dummy import SensorDummy
 from stabilization.pid import Pid
 
 
@@ -14,12 +17,14 @@ class Stabilizator(object):
     Stabilizes a surface according to a IMU-sensor
     '''
 
-    def __init__(self, sensor, driver, pidPeriod, numAxis):
+    def __init__(self, sensorType, driver, pidPeriod, numAxis):
         '''
         Constructor
         '''
         
-        self._sensor = sensor
+        self._sensor = Imu6050Dmp()\
+                            if sensorType == Configuration.VALUE_IMU_CLASS_6050\
+                            else SensorDummy()
         self._driver = driver
         self._pid = Pid(pidPeriod, numAxis, self.readAngles, self.setOutput, "stabilizator")
         
