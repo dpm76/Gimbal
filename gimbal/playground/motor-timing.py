@@ -12,11 +12,11 @@ motor1.start()
 startTime = time()
 try:
   while True:
+    n+=1
     throttle0 = uniform(0.0, 100.0)
     throttle1 = uniform(0.0, 100.0)
     motor0.setThrottle(throttle0)
     motor1.setThrottle(throttle1)
-    n+=1
 except KeyboardInterrupt:
   pass
 finally:

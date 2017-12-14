@@ -13,6 +13,8 @@ from stabilization.stabilizator import Stabilizator
 
 
 def main():
+
+    logging.basicConfig(level=logging.INFO)
     
     configManager = Configuration.getInstance()
     configManager.read()

@@ -1,3 +1,4 @@
+
 # -*- coding: utf-8 -*-
 '''
 Created on 11/04/2015
@@ -224,7 +225,8 @@ class Pid(object):
         rightFreq = 0
         acceptableFreq = 0
         
-        diff = 0.0
+        sleepErrorSum = 0.0
+        sleepTime = self._period
         
         self._previousTime = time.time()
         time.sleep(self._period)
@@ -250,15 +252,16 @@ class Pid(object):
                 currentFreq = 1.0/self._currentPeriod
                 message="I cannot operate at min. {0:.3f}Hz. Current rate is {1:.3f}Hz".format(freq, currentFreq)
                 #print message
-                logging.warn(message)
+                logging.debug(message)
 
-            diff += self._periodTarget - self._currentPeriod
-            sleepTime = self._period - calculationTime + 0.1 * diff
+            sleepError = self._period - self._currentPeriod
+            sleepErrorSum += sleepError
+            sleepTime += 0.6 * sleepError + 0.2 * sleepErrorSum
+            
             if sleepTime > 0.0:            
                 time.sleep(sleepTime)
             else:
-                time.sleep(0.001)
-
+                time.sleep(0.001)            
                 
         if dtSum != 0.0 and iterCount != 0:
             tAvg = dtSum * 1000.0 / iterCount
