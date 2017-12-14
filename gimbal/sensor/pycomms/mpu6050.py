@@ -4,7 +4,7 @@
 from math import atan, atan2, sqrt, asin
 from time import sleep
 
-from pycomms import PyComms
+from .pycomms import PyComms
 from sensor.vector import Vector
 
 
