@@ -29,7 +29,7 @@ class Imu6050Dmp(object):
         
         self._imu = MPU6050(channel=1)
 
-        self._packetSize = 0
+        self._packetSize = 0 #Assigned on start up
         self._angleOffset = [0.0]*3 #radians
         self._gravityOffset = [0.0]*3 #g
         
@@ -187,7 +187,7 @@ class Imu6050Dmp(object):
 
         text = "Using IMU-6050 (DMP)." 
 
-        print(text)
+        #print(text)
         logging.info(text)
 
         self._imu.dmpInitialize()
@@ -204,7 +204,7 @@ class Imu6050Dmp(object):
     
     def calibrate(self):
     
-        print("Calibrating...")
+        logging.info("Calibrating...")
         time.sleep(5)
         self._imu.resetFIFO()
         
@@ -240,7 +240,7 @@ class Imu6050Dmp(object):
         linearAccel = self._imu.dmpGetLinearAccel(accelRaw, g)
         self._gravityOffset = Vector.rotateVector3D(linearAccel, self._angleOffset)
 
-        print("... calibrated.")
+        logging.info("... calibrated.")
 
 
     def getMaxErrorZ(self):
@@ -258,13 +258,13 @@ class Imu6050Dmp(object):
         self._imu.setDMPEnabled(False)
         self._imu.setSleepEnabled(True)
 
-        print("IMU stats:")
-        print("-angle speeds")
-        print(Imu6050Dmp._statisticsToString(self._angSpeedsStats))
-        print("-angles")
-        print(Imu6050Dmp._statisticsToString(self._anglesStats))
-        print("-accels")
-        print(Imu6050Dmp._statisticsToString(self._accelsStats))
+        logging.info("IMU stats:")
+        logging.info("-angle speeds")
+        logging.info(Imu6050Dmp._statisticsToString(self._angSpeedsStats))
+        logging.info("-angles")
+        logging.info(Imu6050Dmp._statisticsToString(self._anglesStats))
+        logging.info("-accels")
+        logging.info(Imu6050Dmp._statisticsToString(self._accelsStats))
         
 
     def _doPacketReading(self):
