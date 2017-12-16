@@ -186,14 +186,7 @@ class Imu6050Dmp(object):
     
     def start(self):
 
-<<<<<<< HEAD
-        text = "Using IMU-6050 (DMP)." 
-
-        #print(text)
-        logging.info(text)
-=======
         logging.info("Using IMU-6050 (DMP).")
->>>>>>> branch 'master' of https://github.com/dpm76/Gimbal.git
 
         self._imu.dmpInitialize()
         self._imu.setDMPEnabled(True)
@@ -214,11 +207,7 @@ class Imu6050Dmp(object):
         '''
     
         logging.info("Calibrating...")
-<<<<<<< HEAD
-        time.sleep(5)
-=======
         time.sleep(1)
->>>>>>> branch 'master' of https://github.com/dpm76/Gimbal.git
         self._imu.resetFIFO()
         
         #Wait for next packet
