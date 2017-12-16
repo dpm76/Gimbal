@@ -116,8 +116,8 @@ class Imu6050Dmp(object):
 
         angles = [round(degrees(angle)) for angle in deviceAngles]
 
-        Imu6050Dmp._calculateStatistics(self._anglesStats, angles)   
-
+        Imu6050Dmp._calculateStatistics(self._anglesStats, angles)
+        
         return angles
     
     def readAccels(self):
@@ -142,12 +142,12 @@ class Imu6050Dmp(object):
             time.sleep(0.001)
 
         fifoCount = self._imu.getFIFOCount()
-        
         if fifoCount == 1024:
             self._imu.resetFIFO()
             fifoCount = 0
         
         while fifoCount < self._packetSize:
+            time.sleep(0.001)
             fifoCount = self._imu.getFIFOCount()
         
         with self._packetLock:
@@ -160,8 +160,9 @@ class Imu6050Dmp(object):
 
     def refreshState(self):
         
-        with self._packetLock:
-            packet = deepcopy(self._packet)
+        self._readPacket()
+        #with self._packetLock:
+        packet = deepcopy(self._packet)
         
         q = self._imu.dmpGetQuaternion(packet)
         g = self._imu.dmpGetGravity(q)
@@ -185,10 +186,7 @@ class Imu6050Dmp(object):
     
     def start(self):
 
-        text = "Using IMU-6050 (DMP)." 
-
-        print(text)
-        logging.info(text)
+        logging.info("Using IMU-6050 (DMP).")
 
         self._imu.dmpInitialize()
         self._imu.setDMPEnabled(True)
@@ -197,28 +195,35 @@ class Imu6050Dmp(object):
         self._packetSize = self._imu.dmpGetFIFOPacketSize()
         
         self._isRunning = True
-        self._packetReadingThread.start()
+        #self._packetReadingThread.start()
         
-        self.calibrate()
+        self.calibrate(True)
 
     
-    def calibrate(self):
+    def calibrate(self, ignoreConfig=False):
+        '''
+        Calibrates sensor.
+        @params ignoreConfig: Forces to calibrate from sensor, ignoring config file.
+        '''
     
-        print("Calibrating...")
-        time.sleep(5)
+        logging.info("Calibrating...")
+        time.sleep(1)
         self._imu.resetFIFO()
         
         #Wait for next packet
-        time.sleep(0.05)
+        time.sleep(0.1)
         
-        with self._packetLock:
-            packet = deepcopy(self._packet)
+        self._readPacket()
+        #with self._packetLock:
+        packet = deepcopy(self._packet)
         
         q = self._imu.dmpGetQuaternion(packet)
         g = self._imu.dmpGetGravity(q)
         
-        if path.exists(Imu6050Dmp.CALIBRATION_FILE_PATH):
-                        
+        if not ignoreConfig and path.exists(Imu6050Dmp.CALIBRATION_FILE_PATH):
+
+            logging.info("Reading calibration from file '{0}'.".format(Imu6050Dmp.CALIBRATION_FILE_PATH)) 
+            
             with open(Imu6050Dmp.CALIBRATION_FILE_PATH, "r") as calibrationFile:
                 serializedCalibration = " ".join(calibrationFile.readlines())
                 calibrationFile.close()
@@ -226,7 +231,7 @@ class Imu6050Dmp(object):
             self._angleOffset = json.loads(serializedCalibration)
             
         else:
-                
+                        
             ypr = self._imu.dmpGetYawPitchRoll(q, g)
             self._angleOffset = [ypr["pitch"], ypr["roll"], ypr["yaw"]]
             
@@ -236,11 +241,13 @@ class Imu6050Dmp(object):
                 calibrationFile.write(serializedCalibration + "\n")
                 calibrationFile.close()
         
+        logging.info("Sensor's angles: ({0}, {1}, {2})".format(*[degrees(angle) for angle in self._angleOffset]))
+        
         accelRaw = self._imu.dmpGetAccel(packet)
         linearAccel = self._imu.dmpGetLinearAccel(accelRaw, g)
         self._gravityOffset = Vector.rotateVector3D(linearAccel, self._angleOffset)
 
-        print("... calibrated.")
+        logging.info("... calibrated.")
 
 
     def getMaxErrorZ(self):
@@ -258,17 +265,18 @@ class Imu6050Dmp(object):
         self._imu.setDMPEnabled(False)
         self._imu.setSleepEnabled(True)
 
-        print("IMU stats:")
-        print("-angle speeds")
-        print(Imu6050Dmp._statisticsToString(self._angSpeedsStats))
-        print("-angles")
-        print(Imu6050Dmp._statisticsToString(self._anglesStats))
-        print("-accels")
-        print(Imu6050Dmp._statisticsToString(self._accelsStats))
+        logging.info("IMU stats:")
+        logging.info("-angle speeds")
+        logging.info(Imu6050Dmp._statisticsToString(self._angSpeedsStats))
+        logging.info("-angles")
+        logging.info(Imu6050Dmp._statisticsToString(self._anglesStats))
+        logging.info("-accels")
+        logging.info(Imu6050Dmp._statisticsToString(self._accelsStats))
         
 
     def _doPacketReading(self):
         
         while self._isRunning:
             self._readPacket()
+            time.sleep(0.001)
         
