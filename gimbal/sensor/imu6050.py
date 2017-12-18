@@ -166,7 +166,7 @@ class Imu6050(I2CSensor):
         angles[0] -= self._accAnglesOffset[0]
         angles[1] -= self._accAnglesOffset[1]
 
-        logging.info(angles)
+        #logging.info(angles)
 
         return angles
 
