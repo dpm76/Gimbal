@@ -18,6 +18,7 @@ class Configuration(object):
     
     KEY_IMU_CLASS = "imu-class"
     VALUE_IMU_CLASS_6050 = "imu6050"
+    VALUE_IMU_CLASS_6050_DMP = "imu6050_dmp"
     VALUE_IMU_CLASS_DUMMY = "dummy"
     
     PID_PERIOD = "pid-period"
