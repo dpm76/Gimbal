@@ -29,7 +29,7 @@ class Imu6050Dmp(object):
         
         self._imu = MPU6050(channel=1)
 
-        self._packetSize = 0
+        self._packetSize = 0 #Assigned on start up
         self._angleOffset = [0.0]*3 #radians
         self._gravityOffset = [0.0]*3 #g
         
