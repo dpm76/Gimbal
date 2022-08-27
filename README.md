@@ -13,7 +13,7 @@ Plug the power wire (red one) into a appropriate power source. Check your servo 
 
 Finally, connect the servo's ground wire (the black one) into any of the BeagleBone's ground wire. If you are using an external power source for servos (what it's really recommended), don't forget to join the power source's ground and the BeagleBone's ground, using any of the ground pins.
 
-Please, watch this [video](https://drive.google.com/file/d/0BwJwUk58ludOeEcyUXliOGhzZGc/view?usp=sharing) in order to get an idea of how to do the set up, and how it works.
+Please, watch this [video](https://drive.google.com/file/d/0BwJwUk58ludOeEcyUXliOGhzZGc/view?usp=sharing&resourcekey=0-36cVKL09Ypu6eJZ2svEsLw) in order to get an idea of how to do the set up, and how it works.
 
 ### IMU 6050 setup
 
